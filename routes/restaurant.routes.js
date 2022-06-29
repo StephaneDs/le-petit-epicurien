@@ -29,7 +29,7 @@ router.post("/restaurants", async (req, res, next) => {
 router.patch("/restaurants/:id", async (req, res, next) => {
   try {
     const restsaurantId = req.params.id
-    const updateRestaurant = await droneModel.findByIdAndUpdate(
+    const updateRestaurant = await Restaurant.findByIdAndUpdate(
       req.params.id,
       req.body,
       {
@@ -45,7 +45,7 @@ router.patch("/restaurants/:id", async (req, res, next) => {
 // Delete the restaurant
 router.delete("/restaurants/:id", async (req, res, next) => {
   try {
-    const deletedrestaurant = await Drone.findByIdAndDelete(req.params.id)
+    const deletedrestaurant = await Restaurant.findByIdAndDelete(req.params.id)
     res.json({ message: `you deleted ${deletedRestaurant}` })
   } catch (err) {
     next(err)
