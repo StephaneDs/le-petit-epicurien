@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const User = require("../models/User.model");
 const bcrypt = require("bcryptjs");
+const saltRounds = 10;
+const jwt = require("jsonwebtoken");
 
 //create Post method for the create the user and login
 // Routes are prefixed with /api/auth
@@ -74,7 +76,7 @@ router.post("/login", (req, res, next) => {
     res.status(400).json({ message: "Provide email and password." });
     return;
   }
-
+  console.log(1);
   // Check the users collection if a user with the same email exists
   User.findOne({ email })
     .then((foundUser) => {
@@ -83,30 +85,35 @@ router.post("/login", (req, res, next) => {
         res.status(401).json({ message: "User not found." });
         return;
       }
-
+      console.log(2);
       // Compare the provided password with the one saved in the database
       const passwordCorrect = bcrypt.compareSync(password, foundUser.password);
-
+      console.log(3);
       if (passwordCorrect) {
         // Deconstruct the user object to omit the password
         const { _id, email, name } = foundUser;
 
         // Create an object that will be set as the token payload
         const payload = { _id, email, name };
-
+        console.log(passwordCorrect);
         // Create and sign the token
+        console.log(jwt);
         const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
           algorithm: "HS256",
           expiresIn: "6h",
         });
-
+        console.log(4);
         // Send the token as the response
         res.status(200).json({ authToken: authToken });
       } else {
         res.status(401).json({ message: "Unable to authenticate the user" });
       }
     })
-    .catch((err) => res.status(500).json({ message: "Internal Server Error" }));
+    .catch((err) => {
+      console.error(err);
+
+      res.status(500).json({ message: "Internal Server Error" });
+    });
 });
 
 module.exports = router;
