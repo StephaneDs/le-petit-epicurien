@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model, SchemaTypes } = require("mongoose");
 
 // TODO: Please make sure you edit the user model to whatever makes sense in this case
 const reservationSchema = new Schema(

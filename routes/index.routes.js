@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const reservationRoutes = require("./reservation.routes");
 
 router.get("/", (req, res, next) => {
   res.json("All good in here");
@@ -8,6 +7,5 @@ router.get("/", (req, res, next) => {
 // You put the next routes here 👇
 // example: router.use("/auth", authRoutes)
 router.use("/auth", require("./user.routes"));
-
-router.use("/reservation", reservationRoutes);
+router.use("/reservation", require("./Reservation.routes"));
 module.exports = router;

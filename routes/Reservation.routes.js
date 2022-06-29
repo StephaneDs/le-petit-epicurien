@@ -1,8 +1,6 @@
-const express = require("express");
-const router = express.Router();
-const mongoose = require("mongoose");
+const router = require("express").Router();
 const Reservation = require("../models/reservation.model.js");
-const isAuthenticated = require("../middleware/isAuthenticated");
+const { isAuthenticated } = require("../middleware/isAuthenticated");
 
 //////Create reservation
 
