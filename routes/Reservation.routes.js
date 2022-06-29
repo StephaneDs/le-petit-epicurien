@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-const Reservation = require("../models/Reservation.model.js");
+const Reservation = require("../models/reservation.model.js");
 
 //////Create reservation
 
@@ -53,7 +53,7 @@ router.get("/:id", async (req, res, next) => {
   try {
     const reservationId = req.params.id;
     const onereservationid = await Reservation.findById(req.params.id).populate(
-      "user"
+      "User"
     );
     res.status(200).json(onereservationid);
   } catch (err) {
