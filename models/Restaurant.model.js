@@ -22,6 +22,10 @@ const restaurantSchema = new Schema({
     saturday: Boolean,
     sunday: Boolean,
   },
+  geometry: {
+    type: Object,
+    default: { type: 'Point', coordinates: [0, 0] },
+  },
 
   operating_hours: [[Date, Date]],
 })

@@ -39,7 +39,7 @@ router.patch('/restaurants/:id', async (req, res, next) => {
         new: true,
       }
     )
-    res.status(200).json(updatedRestaurant)
+    res.status(200).json(updateRestaurant)
   } catch (err) {
     next(err)
   }
@@ -49,7 +49,7 @@ router.patch('/restaurants/:id', async (req, res, next) => {
 router.delete('/restaurants/:id', async (req, res, next) => {
   try {
     const deletedrestaurant = await Restaurant.findByIdAndDelete(req.params.id)
-    res.json({ message: `you deleted ${deletedRestaurant}` })
+    res.json({ message: `you deleted ${deletedrestaurant}` })
   } catch (err) {
     next(err)
   }
