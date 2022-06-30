@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { default: mongoose } = require('mongoose')
+const { isAuthenticated } = require('../middleware/isAuthenticated')
 
 // require the restaurant model
 const Restaurant = require('../models/Restaurant.model')
@@ -50,6 +51,17 @@ router.delete('/restaurants/:id', async (req, res, next) => {
   try {
     const deletedrestaurant = await Restaurant.findByIdAndDelete(req.params.id)
     res.json({ message: `you deleted ${deletedrestaurant}` })
+  } catch (err) {
+    next(err)
+  }
+})
+
+//GET all restaurants by Id
+router.get('/:id', async (req, res, next) => {
+  try {
+    const restaurantId = req.params.id
+    const oneRestaurantid = await Restaurant.findById(req.params.id)
+    res.status(200).json(oneRestaurantid)
   } catch (err) {
     next(err)
   }
