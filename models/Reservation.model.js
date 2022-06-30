@@ -16,6 +16,7 @@ const reservationSchema = new Schema(
     restaurant: {
       type: SchemaTypes.ObjectId,
       ref: 'Restaurant',
+
       required: true,
     },
     date: {
