@@ -1,4 +1,4 @@
-const { Schema, model, SchemaTypes } = require("mongoose");
+const { Schema, model, SchemaTypes } = require('mongoose')
 
 // TODO: Please make sure you edit the user model to whatever makes sense in this case
 const reservationSchema = new Schema(
@@ -10,22 +10,24 @@ const reservationSchema = new Schema(
     ////// having the reference to the user model
     user: {
       type: SchemaTypes.ObjectId,
-      ref: "User",
-      required: true,
+      ref: 'User',
     },
     /////having the reference to the resturant model
     resturant: {
       type: SchemaTypes.ObjectId,
-      ref: "Resturant",
+      ref: 'resturant',
       required: true,
+    },
+    date: {
+      type: SchemaTypes.Date,
     },
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
     timestamps: true,
   }
-);
+)
 
-const reservation = model("Reservation", reservationSchema);
+const reservation = model('Reservation', reservationSchema)
 
-module.exports = reservation;
+module.exports = reservation
