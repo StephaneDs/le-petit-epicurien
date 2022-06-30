@@ -6,8 +6,9 @@ const { isAuthenticated } = require('../middleware/isAuthenticated')
 
 router.post('/', isAuthenticated, async (req, res, next) => {
   try {
-    console.log(req.body)
+    ///console.log(req.body)
     const reservation = req.body
+
     const addreservation = await Reservation.create(reservation)
 
     res.status(201).json({
@@ -31,11 +32,11 @@ router.patch('/:id', isAuthenticated, async (req, res, next) => {
         new: true,
       }
     )
-    console.log(req.body)
+    ///console.log(req.body)
     res.status(200).json(updatedreservation)
-    console.log(updatedreservation)
+    ///console.log(updatedreservation)
   } catch (error) {
-    console.log(error)
+    ///console.log(error)
     next(error)
   }
 })
@@ -44,9 +45,13 @@ router.patch('/:id', isAuthenticated, async (req, res, next) => {
 
 router.delete('/:id', isAuthenticated, async (req, res, next) => {
   try {
+    console.log(req.params.id)
     const deletedThing = await Reservation.findByIdAndRemove(req.params.id)
-    res.status(204).send(deletedThing)
+
+    res.status(200).json({ message: 'Reservation deleted' })
+    console.log(deletedThing)
   } catch (err) {
+    console.error(err)
     next(err)
   }
 })

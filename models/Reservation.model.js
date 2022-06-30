@@ -15,11 +15,16 @@ const reservationSchema = new Schema(
     /////having the reference to the restaurant model
     restaurant: {
       type: SchemaTypes.ObjectId,
-      ref: 'restaurant',
+      ref: 'Restaurant',
+
       required: true,
     },
     date: {
       type: SchemaTypes.Date,
+    },
+    numberOfGuests: {
+      type: Number,
+      required: true,
     },
   },
   {
