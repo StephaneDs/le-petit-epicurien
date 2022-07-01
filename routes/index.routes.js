@@ -5,7 +5,7 @@ const router = express.Router()
 // example: router.use("/auth", authRoutes)
 router.use('/auth', require('./user.routes'))
 router.use('/reservation', require('./Reservation.routes'))
-router.use('/restaurant', require('./restaurant.routes.js'))
+router.use('/restaurant', require('./restaurant.routes'))
 
 /* GET /
 It's useful to have a route which we can request to check the API is running.

@@ -1,4 +1,4 @@
-const { Schema, model, SchemaTypes } = require("mongoose");
+const { Schema, model, SchemaTypes } = require("mongoose")
 
 // TODO: Please make sure you edit the user model to whatever makes sense in this case
 const reservationSchema = new Schema(
@@ -24,8 +24,8 @@ const reservationSchema = new Schema(
     // this second object adds extra properties: `createdAt` and `updatedAt`
     timestamps: true,
   }
-);
+)
 
-const reservation = model("Reservation", reservationSchema);
+const reservation = model("Reservation", reservationSchema)
 
-module.exports = reservation;
+module.exports = reservation

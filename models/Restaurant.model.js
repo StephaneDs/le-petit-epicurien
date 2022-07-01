@@ -7,23 +7,22 @@ const restaurantSchema = new Schema({
   localisation: {
     address: {
       street_name: String,
-      street_number: Number,
       city: String,
       country: String,
-      arrondissement: String,
+      postalCode: Number,
     },
   },
-  daysOfWeek: {
-    monday: Boolean,
-    tuesday: Boolean,
-    wednesday: Boolean,
-    thursday: Boolean,
-    friday: Boolean,
-    saturday: Boolean,
-    sunday: Boolean,
-  },
+  priceRange: Number,
 
-  operating_hours: [[Date, Date]],
+  daysOfWeek: {
+    monday: [{ start: Date, end: Date }],
+    tuesday: [{ start: Date, end: Date }],
+    wednesday: [{ start: Date, end: Date }],
+    thursday: [{ start: Date, end: Date }],
+    friday: [{ start: Date, end: Date }],
+    saturday: [{ start: Date, end: Date }],
+    sunday: [{ start: Date, end: Date }],
+  },
 })
 
 const Restaurant = model('restaurants', restaurantSchema)
