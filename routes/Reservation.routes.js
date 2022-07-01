@@ -1,19 +1,24 @@
 const router = require('express').Router()
 const Reservation = require('../models/reservation.model.js')
 const { isAuthenticated } = require('../middleware/isAuthenticated')
+const UserModel = require('../models/User.model.js')
 
 //////Create reservation
 
 router.post('/', isAuthenticated, async (req, res, next) => {
   try {
     ///console.log(req.body)
-    const reservation = req.body
 
-    const addreservation = await Reservation.create(reservation)
+    const { restaurant, numberOfGuests } = req.body
+    const user = await UserModel.findOne({ username: req.payload.username })
 
-    res.status(201).json({
-      message: 'Reservation done ',
+    const reservation = await Reservation.create({
+      restaurant,
+      numberOfGuests,
+      user: user._id,
     })
+
+    res.status(201).json(reservation)
   } catch (error) {
     next(error)
   }
@@ -62,7 +67,7 @@ router.get('/:id', isAuthenticated, async (req, res, next) => {
   try {
     const reservationId = req.params.id
     const onereservationid = await Reservation.findById(req.params.id).populate(
-      'User'
+      'user'
     )
     res.status(200).json(onereservationid)
   } catch (err) {
@@ -72,9 +77,12 @@ router.get('/:id', isAuthenticated, async (req, res, next) => {
 
 ////// get all reservations
 
-router.get('/', isAuthenticated, async (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
-    const reservations = await Reservation.find().populate('user')
+    const reservations = await Reservation.find().populate(
+      'user restaurant',
+      '-_id name'
+    )
     res.status(200).json(reservations)
   } catch (err) {
     next(err)
