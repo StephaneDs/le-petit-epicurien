@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const Reservation = require('../models/reservation.model.js')
+const Reservation = require('../models/Reservation.model.js')
 const { isAuthenticated } = require('../middleware/isAuthenticated')
 const UserModel = require('../models/User.model.js')
 
