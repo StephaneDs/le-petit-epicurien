@@ -30,5 +30,5 @@ const restaurantSchema = new Schema({
   operating_hours: [[Date, Date]],
 })
 
-const Restaurant = model('restaurants', restaurantSchema)
+const Restaurant = model('Restaurant', restaurantSchema)
 module.exports = Restaurant
