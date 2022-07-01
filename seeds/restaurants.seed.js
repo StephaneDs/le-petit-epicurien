@@ -1,4 +1,5 @@
 const axios = require('axios')
+const { default: mongoose } = require('mongoose')
 const Restaurant = require('../models/Restaurant.model')
 require('../db/index')
 
@@ -13,55 +14,74 @@ async function getRestaurantInfoAndCreate(page) {
         pageNumber: page,
       },
       headers: {
-        'X-RapidAPI-Key': 'a7fd2d32fcmsh84dd472d88977dep1844efjsn447463b82aa1',
+        'X-RapidAPI-Key': 'ef36f6280bmsh2461c25d3329b7ap1e0208jsn739d4296f147',
         'X-RapidAPI-Host': 'the-fork-the-spoon.p.rapidapi.com',
       },
     }
 
     const response = await axios.request(options)
 
-    console.log(response.data.data.map((resto) => resto.address.locality))
+    // console.log(response.data.data.map((resto) => resto.address.locality))
 
-    const restaurantsToCreate = response.data.data.map((restaurant) => {
+    const restaurantsToUpsert = response.data.data.map((restaurant) => {
       const {
         address: { street, locality, country, postalCode },
         priceRange,
         mainPhotoSrc,
         name,
+        hasLoyaltyProgram,
+        slug,
         servesCuisine,
         geo,
+        photosCarousel,
+        marketingOffer,
       } = restaurant
       const formattedRestaurant = {
         name: name,
         localisation: {
           address: { street_name: street, city: locality, country: country },
         },
+        slug: slug,
         priceRange: priceRange,
         mainImage: mainPhotoSrc,
         cuisine: servesCuisine,
         geo: geo,
         galleryPictures: photosCarousel,
+        loyaltyProgram: hasLoyaltyProgram,
+        marketingOffer: marketingOffer,
       }
-      return formattedRestaurant
+      return {
+        updateOne: {
+          filter: { slug: slug },
+          update: { $set: formattedRestaurant },
+          upsert: true, // <<==== upsert in every document
+        },
+      }
     })
 
-    const createdRestaurant = await Restaurant.create(restaurantsToCreate)
-    console.log(createdRestaurant)
+    const createdRestaurant = await Restaurant.collection.bulkWrite(
+      restaurantsToUpsert
+    )
+    const { nUpserted, nModified, nMatched } = createdRestaurant.result
+    console.log({ nUpserted, nModified, nMatched })
   } catch (error) {
     console.error(error)
   }
 }
 
+const sleep = async (milliseconds) =>
+  new Promise((res, rej) => {
+    setTimeout(() => res(), milliseconds)
+  })
+
+const limit = 100
+
 async function seed() {
-  await Restaurant.deleteMany()
-  let i = 0
-  const intervalId = setInterval(async () => {
-    i += 1
-    if (i > 100) {
-      clearInterval(intervalId)
-    }
+  for (let i = 1; i <= limit; i++) {
+    console.log('Page', i)
     await getRestaurantInfoAndCreate(i)
-  }, 1000)
-  mongoose.connection.close()
+    await sleep(250)
+  }
+  await mongoose.connection.close()
 }
 seed()

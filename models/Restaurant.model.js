@@ -3,6 +3,7 @@ const { model, Schema, schemaTypes, default: mongoose } = require('mongoose')
 const restaurantSchema = new Schema({
   name: { type: String, required: true },
   image: String,
+  slug: String,
   cuisine: String,
   localisation: {
     address: {
