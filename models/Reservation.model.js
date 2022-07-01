@@ -1,3 +1,4 @@
+
 const { Schema, model, SchemaTypes } = require('mongoose')
 const Restaurant = require('./Restaurant.model')
 const User = require('./User.model')
@@ -17,7 +18,9 @@ const reservationSchema = new Schema(
     /////having the reference to the restaurant model
     restaurant: {
       type: SchemaTypes.ObjectId,
+
       ref: Restaurant,
+
       required: true,
     },
     date: {
@@ -33,6 +36,7 @@ const reservationSchema = new Schema(
     timestamps: true,
   }
 )
+
 
 const reservation = model('Reservation', reservationSchema)
 
