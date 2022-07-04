@@ -22,6 +22,9 @@ async function getRestaurantInfoAndCreate(page) {
     const response = await axios.request(options)
 
     // console.log(response.data.data.map((resto) => resto.address.locality))
+    if (!response.data.data || !response.data.data.length) {
+      console.log('response.data.data was not an array', response.data.data)
+    }
 
     const restaurantsToUpsert = response.data.data.map((restaurant) => {
       const {
