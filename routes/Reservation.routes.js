@@ -9,14 +9,17 @@ router.post('/', isAuthenticated, async (req, res, next) => {
   try {
     ///console.log(req.body)
 
-    const { restaurant, numberOfGuests } = req.body
+    const { date, text, restaurant, numberOfGuests } = req.body
     const user = await UserModel.findOne({ username: req.payload.username })
-
     const reservation = await Reservation.create({
       restaurant,
       numberOfGuests,
+      text,
+      date,
       user: user._id,
     })
+
+    console.log('after create', typeof reservation.date)
 
     res.status(201).json(reservation)
   } catch (error) {
@@ -26,19 +29,20 @@ router.post('/', isAuthenticated, async (req, res, next) => {
 
 ////// update the reservation
 
-router.patch('/:id', isAuthenticated, async (req, res, next) => {
+router.patch('/:id', async (req, res, next) => {
   try {
     const id = req.params.id
-    const { date, text } = req.body
-    const updatedreservation = await Reservation.findByIdAndUpdate(
+    console.log(id)
+    const { numberOfGuests, date, text } = req.body
+    const updatedReservation = await Reservation.findByIdAndUpdate(
       id,
-      { date, text },
+      { date, text, numberOfGuests },
       {
         new: true,
       }
     )
     ///console.log(req.body)
-    res.status(200).json(updatedreservation)
+    res.status(200).json(updatedReservation)
     ///console.log(updatedreservation)
   } catch (error) {
     ///console.log(error)
@@ -48,7 +52,7 @@ router.patch('/:id', isAuthenticated, async (req, res, next) => {
 
 ///// delete the reservation
 
-router.delete('/:id', isAuthenticated, async (req, res, next) => {
+router.delete('/:id', async (req, res, next) => {
   try {
     console.log(req.params.id)
     const deletedThing = await Reservation.findByIdAndRemove(req.params.id)
@@ -77,12 +81,11 @@ router.get('/:id', isAuthenticated, async (req, res, next) => {
 
 ////// get all reservations
 
-router.get('/', async (req, res, next) => {
+router.get('/', isAuthenticated, async (req, res, next) => {
   try {
-    const reservations = await Reservation.find().populate(
-      'user restaurant',
-      '-_id name'
-    )
+    const reservations = await Reservation.find({
+      user: req.payload._id,
+    }).populate('user restaurant', '-_id name')
     res.status(200).json(reservations)
   } catch (err) {
     next(err)

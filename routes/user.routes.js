@@ -62,6 +62,8 @@ router.post('/signup', async (req, res, next) => {
     // Create a new object that doesn't expose the password
     const user = { email, username }
 
+    ///MONGODB_URI = mongodb+srv://epicurien:ironproject@cluster0.xjgkz.mongodb.net/epicurien?retryWrites=true&w=majority
+
     // Send a json response containing the user object
     res.status(201).json({ user: user })
   } catch (err) {
