@@ -116,4 +116,26 @@ router.post('/login', (req, res, next) => {
     })
 })
 
+router.get('/verify', async (req, res, next) => {
+  // Verify the bearer token is still valid
+  // get the bearer token from the header
+  const { authorization } = req.headers
+
+  // isolate the jwt
+  const token = authorization.replace('Bearer ', '')
+  console.log({ token })
+
+  try {
+    // verify the jwt with the jsonwebtoken package
+    const payload = jwt.verify(token, process.env.TOKEN_SECRET)
+    console.log({ payload })
+
+    // send the user the payload
+    res.json({ token, payload })
+  } catch (error) {
+    console.error(error)
+    res.status(400).json({ message: 'Invalid token' })
+  }
+})
+
 module.exports = router
