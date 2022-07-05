@@ -8,7 +8,7 @@ const jwt = require('jsonwebtoken')
 // Routes are prefixed with /api/auth
 
 router.post('/signup', (req, res, next) => {
-  const { email, password, name } = req.body
+  const { email, password, username: name } = req.body
 
   // Check if email or password or name are provided as empty string
   if (email === '' || password === '' || name === '') {
