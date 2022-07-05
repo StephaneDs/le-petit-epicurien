@@ -14,6 +14,8 @@ const restaurantSchema = new Schema({
     },
   },
   priceRange: Number,
+  hasLoyaltyProgram: Boolean,
+  marketingOffer: String,
 
   daysOfWeek: {
     monday: [{ start: Date, end: Date }],
@@ -24,13 +26,6 @@ const restaurantSchema = new Schema({
     saturday: [{ start: Date, end: Date }],
     sunday: [{ start: Date, end: Date }],
   },
-
-  geometry: {
-    type: Object,
-    default: { type: 'Point', coordinates: [0, 0] },
-  },
-
-  operating_hours: [[Date, Date]],
 })
 
 const Restaurant = model('Restaurant', restaurantSchema)
