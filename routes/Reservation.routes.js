@@ -9,13 +9,14 @@ router.post('/', isAuthenticated, async (req, res, next) => {
   try {
     ///console.log(req.body)
 
-    const { date, text, restaurant, numberOfGuests } = req.body
+    const { date, text, restaurant, numberOfGuests, time } = req.body
     const user = await UserModel.findOne({ username: req.payload.username })
     const reservation = await Reservation.create({
       restaurant,
       numberOfGuests,
       text,
       date,
+      time,
       user: user._id,
     })
 
@@ -33,10 +34,11 @@ router.patch('/:id', async (req, res, next) => {
   try {
     const id = req.params.id
     console.log(id)
-    const { numberOfGuests, date, text } = req.body
+    const { numberOfGuests, date, text, time } = req.body
+    console.log(req.body)
     const updatedReservation = await Reservation.findByIdAndUpdate(
       id,
-      { date, text, numberOfGuests },
+      { date, time, text, numberOfGuests },
       {
         new: true,
       }
