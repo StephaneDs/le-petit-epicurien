@@ -9,8 +9,42 @@ const Restaurant = require('../models/Restaurant.model')
 // List of all the restaurants
 router.get('/restaurants', async (req, res, next) => {
   try {
-    const allRestaurant = await Restaurant.find()
-    res.status(200).json(allRestaurant)
+    const page = parseInt(req.query.page) || 1
+    let limit = parseInt(req.query.limit) || 30
+    if (limit > 30) {
+      limit = 30
+    }
+
+    const startIndex = (page - 1) * limit
+    const endIndex = page * limit
+    const name = req.query.name
+
+    const filter = {}
+    if (name) {
+      filter.name = name
+    }
+
+    const totalDocumentCount = await Restaurant.countDocuments(filter)
+
+    const next =
+      endIndex < totalDocumentCount
+        ? {
+            page: page + 1,
+            limit: limit,
+          }
+        : null
+
+    const previous =
+      startIndex > 0
+        ? {
+            page: page - 1,
+            limit: limit,
+          }
+        : null
+
+    const results = await Restaurant.find(filter).limit(limit).skip(startIndex)
+
+    res.status(200).json({ next, previous, totalDocumentCount, results })
   } catch (err) {
     next(err)
   }
@@ -32,7 +66,7 @@ router.post('/restaurants', async (req, res, next) => {
 //  Update a restaurant
 router.patch('/restaurants/:id', async (req, res, next) => {
   try {
-    const restsaurantId = req.params.id
+    const restaurantId = req.params.id
     const updateRestaurant = await Restaurant.findByIdAndUpdate(
       req.params.id,
       req.body,
